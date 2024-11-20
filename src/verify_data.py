@@ -51,7 +51,7 @@ def verify_files(json_path, csv_path, image_folder):
 
 # Paths to the files and directories
 json_file_path = "data/annotations/feelingbluelemas.json"
-csv_file_path = "data/annotations/wikiartabstractcolors.csv"
+csv_file_path = "data/processed/fixed_feelingblue_annotations.csv"
 image_folder_path = "data/raw/wikiart/"
 
 # Run the verification

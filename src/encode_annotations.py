@@ -12,8 +12,8 @@ def encode_annotations(input_csv, output_csv):
     print(f"Encoded annotations saved to {output_csv}")
 
 # Paths
-input_csv = "data/processed/feelingblue_annotations.csv"
-output_csv = "data/processed/encoded_annotations.csv"
+input_csv = "data/processed/combined_feelingblue_annotations.csv"
+output_csv = "data/processed/combined_encoded_annotations.csv"
 
 # Encode annotations
 encode_annotations(input_csv, output_csv)

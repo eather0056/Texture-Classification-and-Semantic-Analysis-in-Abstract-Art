@@ -89,6 +89,16 @@ def fine_tune_clip_with_vision_model(train_loader, val_loader, epochs=5, learnin
 
         print(f"Epoch {epoch + 1}: Validation Loss = {val_loss / len(val_loader)}, Accuracy = {correct / len(val_loader.dataset):.4f}")
 
+    # Save the fine-tuned model and processor
+    torch.save(clip_model.state_dict(), "../models/fine_tuned_clip_model.pth")
+    print("Model weights saved as fine_tuned_clip_model.pth")
+
+    torch.save(clip_model, "../models/fine_tuned_clip_model_complete.pth")
+    print("Complete model saved as fine_tuned_clip_model_complete.pth")
+
+    processor.save_pretrained("../models/fine_tuned_processor")
+    print("Processor configuration saved in fine_tuned_processor/")
+
 # Load the DTD dataset
 data_dir = "data/raw/dtd"
 train_loader, val_loader = preprocess_dtd_dataset(data_dir)

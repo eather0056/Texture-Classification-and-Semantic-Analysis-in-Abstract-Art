@@ -166,3 +166,4 @@ cython_debug/
 data/raw/
 *.zip
 *.tar.gz
+models/

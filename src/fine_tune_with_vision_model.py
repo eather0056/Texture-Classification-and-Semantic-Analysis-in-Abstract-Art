@@ -4,6 +4,7 @@ import torch.nn as nn
 from torch.optim import Adam
 from tqdm import tqdm
 from collections import OrderedDict
+import os
 from preprocess_dtd import preprocess_dtd_dataset  # Import your preprocessing function
 
 # Function to load fine-tuned weights into the vision encoder
@@ -49,6 +50,9 @@ def fine_tune_clip_with_vision_model(train_loader, val_loader, epochs=5, learnin
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     clip_model.to(device)
 
+    # Ensure the models directory exists
+    os.makedirs("./models/checkpoints", exist_ok=True)
+
     # Training loop
     for epoch in range(epochs):
         clip_model.train()
@@ -89,14 +93,19 @@ def fine_tune_clip_with_vision_model(train_loader, val_loader, epochs=5, learnin
 
         print(f"Epoch {epoch + 1}: Validation Loss = {val_loss / len(val_loader)}, Accuracy = {correct / len(val_loader.dataset):.4f}")
 
-    # Save the fine-tuned model and processor
-    torch.save(clip_model.state_dict(), "../models/fine_tuned_clip_model.pth")
-    print("Model weights saved as fine_tuned_clip_model.pth")
+        # Save a checkpoint after each epoch
+        checkpoint_path = f"./models/checkpoints/epoch_{epoch + 1}_clip_model.pth"
+        torch.save(clip_model.state_dict(), checkpoint_path)
+        print(f"Checkpoint saved at {checkpoint_path}")
 
-    torch.save(clip_model, "../models/fine_tuned_clip_model_complete.pth")
-    print("Complete model saved as fine_tuned_clip_model_complete.pth")
+    # Save the final fine-tuned model and processor
+    torch.save(clip_model.state_dict(), "./models/fine_tuned_clip_model.pth")
+    print("Final model weights saved as fine_tuned_clip_model.pth")
 
-    processor.save_pretrained("../models/fine_tuned_processor")
+    torch.save(clip_model, "./models/fine_tuned_clip_model_complete.pth")
+    print("Final complete model saved as fine_tuned_clip_model_complete.pth")
+
+    processor.save_pretrained("./models/fine_tuned_processor")
     print("Processor configuration saved in fine_tuned_processor/")
 
 # Load the DTD dataset

@@ -84,6 +84,33 @@ def evaluate_and_visualize_model(clip_model, processor, test_loader, class_names
     plt.savefig("per_class_accuracy.png")
     plt.show()
 
+    # Confusion Matrix
+    conf_matrix = confusion_matrix(y_true, y_pred)
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(conf_matrix, annot=True, fmt="d", cmap="Blues", xticklabels=class_names, yticklabels=class_names)
+    plt.xlabel("Predicted Label")
+    plt.ylabel("True Label")
+    plt.title("Confusion Matrix")
+    plt.savefig("confusion_matrix.png")
+    plt.show()
+
+    # Per-Class Accuracy
+    class_accuracies = conf_matrix.diagonal() / conf_matrix.sum(axis=1)
+    plt.figure(figsize=(10, 6))
+    plt.bar(class_names, class_accuracies, color='skyblue')
+    plt.xlabel("Class Name")
+    plt.ylabel("Accuracy")
+    plt.title("Per-Class Accuracy")
+    plt.xticks(rotation=45)
+    plt.savefig("per_class_accuracy.png")
+    plt.show()
+
+    # Save the Classification Report as Text
+    report = classification_report(y_true, y_pred, target_names=class_names)
+    with open("classification_report.txt", "w") as f:
+        f.write(report)
+    print("Classification Report saved as classification_report.txt")
+
 # Data preprocessing
 transform = transforms.Compose([
     transforms.Resize((224, 224)),

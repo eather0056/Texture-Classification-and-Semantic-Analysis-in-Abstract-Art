@@ -1,57 +1,99 @@
-now next task corelation between texture, emmotion and images
+# Texture Classification and Semantic Analysis in Abstract Art
 
+This repository contains code and resources for analyzing abstract art by classifying textures and correlating them with viewer-generated emotional responses. The project bridges computational vision and sentiment analysis to uncover patterns in abstract art.
 
+## Project Overview
+Abstract art evokes diverse emotional responses, making it challenging to analyze computationally. This project focuses on:
+- **Texture Classification:** Classifying textures (e.g., chaotic, smooth, rough) in abstract art using a fine-tuned CLIP model.
+- **Sentiment Analysis:** Extracting polarity and subjectivity from viewer-generated text annotations.
+- **Correlation Analysis:** Exploring relationships between textures and emotional responses.
 
-eth@eth:~/Texture-Classification-and-Semantic-Analysis-in-Abstract-Art$ python3 src/Correlation_Analysis.py 
-Combined DataFrame Info:
-<class 'pandas.core.frame.DataFrame'>
-RangeIndex: 21550 entries, 0 to 21549
-Data columns (total 9 columns):
- #   Column        Non-Null Count  Dtype  
----  ------        --------------  -----  
- 0   filename      21550 non-null  object 
- 1   texture       21550 non-null  object 
- 2   category_x    21550 non-null  object 
- 3   emotion       21550 non-null  object 
- 4   category_y    21550 non-null  object 
- 5   rationale     21550 non-null  object 
- 6   polarity      21550 non-null  float64
- 7   subjectivity  21550 non-null  float64
- 8   annotator     21550 non-null  object 
-dtypes: float64(2), object(7)
-memory usage: 1.5+ MB
-None
-Sample Combined Data:
-                                            filename texture category_x emotion category_y                                          rationale  polarity  subjectivity      annotator
-0  edward-avedisian_untitled-203-watercolor-ball-...  smooth     smooth   anger        MIN  I've seen this same image in multiple HITs, an...     0.230         0.380  annotator_260
-1  edward-avedisian_untitled-203-watercolor-ball-...  smooth     smooth   anger        MIN      The pink and yellow contrast each other well.    -0.075         0.225  annotator_285
-2  edward-avedisian_untitled-203-watercolor-ball-...  smooth     smooth   anger        MIN  Reminds me of a brightly colored piece of cand...     0.700         0.800  annotator_260
-3  edward-avedisian_untitled-203-watercolor-ball-...  smooth     smooth   anger        MIN                        bright color so better feel     0.600         0.650  annotator_280
-4  edward-avedisian_untitled-203-watercolor-ball-...  smooth     smooth   anger        MIN                     image is bright and simplistic     0.100         0.650   annotator_32
-Grouped Data:
-   texture    emotion  polarity  subjectivity  image_count
-0  chaotic      anger -0.023698      0.385857          871
-1  chaotic    disgust -0.002612      0.366143         2035
-2  chaotic       fear -0.000640      0.366749         1768
-3  chaotic  happiness  0.132919      0.396162         1175
-4  chaotic    sadness -0.035212      0.383472          478
-Grouped data saved to data/processed/grouped_texture_emotion.csv
-Correlation Matrix Input Data:
-   polarity  subjectivity  image_count  texture_chaotic  texture_circular  texture_dots  texture_lines  texture_rough  texture_smooth
-0     0.230         0.380          367            False             False         False          False          False            True
-1    -0.075         0.225          367            False             False         False          False          False            True
-2     0.700         0.800          367            False             False         False          False          False            True
-3     0.600         0.650          367            False             False         False          False          False            True
-4     0.100         0.650          367            False             False         False          False          False            True
-Correlation Matrix:
-                  polarity  subjectivity  image_count  texture_chaotic  texture_circular  texture_dots  texture_lines  texture_rough  texture_smooth
-polarity          1.000000      0.157380    -0.043558        -0.025824         -0.001095      0.010936       0.022394      -0.021367        0.034410
-subjectivity      0.157380      1.000000    -0.010746         0.001889         -0.001015     -0.005848      -0.002449       0.011437       -0.011750
-image_count      -0.043558     -0.010746     1.000000         0.298280         -0.390791     -0.218605      -0.328823       0.406499       -0.237809
-texture_chaotic  -0.025824      0.001889     0.298280         1.000000         -0.169152     -0.075558      -0.262066      -0.439707       -0.290878
-texture_circular -0.001095     -0.001015    -0.390791        -0.169152          1.000000     -0.030751      -0.106657      -0.178955       -0.118383
-texture_dots      0.010936     -0.005848    -0.218605        -0.075558         -0.030751      1.000000      -0.047642      -0.079936       -0.052880
-texture_lines     0.022394     -0.002449    -0.328823        -0.262066         -0.106657     -0.047642       1.000000      -0.277253       -0.183410
-texture_rough    -0.021367      0.011437     0.406499        -0.439707         -0.178955     -0.079936      -0.277253       1.000000       -0.307735
-texture_smooth    0.034410     -0.011750    -0.237809        -0.290878         -0.118383     -0.052880      -0.183410      -0.307735        1.000000
-Correlation matrix saved to data/processed/correlation_matrix.csv
+## Repository Structure
+```
+├── src/
+│   ├── Correlation_Analysis.py           # Code for texture-emotion correlation analysis
+│   ├── fine_tune_with_vision_model.py    # Code for fine-tuning the CLIP model
+│   ├── generate_splits.py                # Script to create training, validation, and test splits
+│   ├── model_evaluation.py               # Code to evaluate the trained model
+│   ├── save_datafrme.py                  # Helper script to save data
+│   ├── texture_analysis.py               # Main script for texture and sentiment analysis
+│   ├── texture_categorized_annotations.py  # Code to prepare categorized annotations
+│   ├── verify_data.py                    # Script for data verification
+│   └── Temp/                             # Temporary scripts and files
+├── data/
+│   ├── raw/                              # Raw dataset of abstract art images
+│   ├── processed/                        # Processed data files
+│   └── results/                          # Analysis results and visualizations
+├── models/                               # Trained model weights and configurations
+├── results/                              # Generated plots and outputs
+└── README.md                             # Repository documentation
+```
+
+## Installation
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/your-username/Texture-Classification-and-Semantic-Analysis-in-Abstract-Art.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd Texture-Classification-and-Semantic-Analysis-in-Abstract-Art
+   ```
+3. Install the required Python packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+## Dataset Preparation
+1. **Obtain Dataset:** Ensure you have a dataset of abstract art images with texture and emotional annotations.
+2. **Organize Dataset:** Structure your dataset as follows:
+   ```
+   data/raw/wikiart/
+   ├── images/
+   │   ├── chaotic/
+   │   ├── smooth/
+   │   ├── rough/
+   │   └── ... (other texture categories)
+   ├── annotations/
+   │   ├── emotions.json
+   │   └── textures.json
+   ```
+3. Run `generate_splits.py` to create train, validation, and test splits:
+   ```bash
+   python src/generate_splits.py
+   ```
+
+## Running the Experiment
+### 1. Fine-Tuning the Model
+Fine-tune the CLIP model using the texture data:
+```bash
+python src/fine_tune_with_vision_model.py
+```
+Model checkpoints and final weights will be saved in the `models/` directory.
+
+### 2. Evaluating the Model
+Evaluate the trained model on the test dataset:
+```bash
+python src/model_evaluation.py
+```
+This script generates a classification report and confusion matrix.
+
+### 3. Sentiment Analysis and Correlation
+Perform sentiment analysis and correlate textures with emotions:
+```bash
+python src/texture_analysis.py
+python src/Correlation_Analysis.py
+```
+Results, including correlation matrices and scatter plots, will be saved in the `results/` directory.
+
+## Results
+- **Classification Performance:** Model accuracy, precision, recall, and F1-score for each texture class.
+- **Sentiment Insights:** Average polarity and subjectivity for each emotion.
+- **Correlation Analysis:** Heatmaps and scatter plots showing texture-emotion relationships.
+
+## Future Work
+- Refine texture categories to reduce semantic overlaps.
+- Explore additional models and datasets for improved texture classification.
+- Develop filters to handle ambiguous annotations and reduce noise.
+
+## Acknowledgments
+This work was supported and guided by **Professor Lledó Museros Cabedo**, who provided the dataset and valuable feedback.
